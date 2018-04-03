@@ -50,6 +50,10 @@ public class SmjerRestController {
 		return new ResponseEntity<>(HttpStatus.CONFLICT);
 	}
 	
+	
+	
+	
+	
 	@PutMapping("smjer")
 	@ApiOperation(value = "Modifikuje postojeći smjer u bazi podataka")
 	public ResponseEntity<Smjer> updateSmjer(@RequestBody Smjer  smjer){

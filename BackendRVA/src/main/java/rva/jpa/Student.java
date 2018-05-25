@@ -2,6 +2,7 @@ package rva.jpa;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +13,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 
 /**
@@ -29,14 +32,14 @@ public class Student implements Serializable {
 	@SequenceGenerator(name="STUDENT_ID_GENERATOR", sequenceName="STUDENT_SEQ")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="STUDENT_ID_GENERATOR")
 	private Integer id;
-
+	
 	@Column(name="broj_indeksa")
 	private String brojIndeksa;
-
+	
 	private String ime;
 
 	private String prezime;
-
+	
 	//bi-directional many-to-one association to Grupa
 	@ManyToOne
 	@JoinColumn(name="grupa")

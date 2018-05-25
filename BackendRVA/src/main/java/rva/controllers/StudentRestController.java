@@ -5,6 +5,8 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import rva.jpa.Smjer;
 import rva.jpa.Student;
 import rva.reps.StudentRepository;
 
@@ -23,39 +26,59 @@ import rva.reps.StudentRepository;
 public class StudentRestController {
 	@Autowired
 	private StudentRepository studentRepository;
+
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
 	
 	@GetMapping("student")
-	@ApiOperation(value = "Vraća kolekciju svih studenata iz baze podataka")
+	@ApiOperation(value = "VraÄ‡a kolekciju svih studenata iz baze podataka")
 	public Collection<Student> getStudent(){
 		return studentRepository.findAll();
 	}
 	
-	@DeleteMapping("studentId/{id}")
-	@ApiOperation(value = "Briše studenata u bazi podataka čiji je id vrednost prosleđena kao path varijabla")
-	public ResponseEntity<Student> deleteStudent(@PathVariable ("id") Integer id){
-		if(!studentRepository.existsById(id))
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		studentRepository.deleteById(id);
-		return new ResponseEntity<>(HttpStatus.OK);
+	@GetMapping("student/{id}")
+	@ApiOperation(value = "Vrаća studenta iz baze podataka ciji je ID vrednost prosleđena kao path varijabla")
+	public Student getStudent(@PathVariable("id") Integer id) {
+		return studentRepository.getOne(id);
+	}
+	
+	@DeleteMapping("student/{id}")
+	@CrossOrigin
+	@ApiOperation(value = "Briše studenta iz baze podataka ciji je ID vrednost prosleđena kao path varijabla")
+	public ResponseEntity<Student> deleteStudent(@PathVariable("id") Integer id){
+		if(studentRepository.existsById(id)) {
+			studentRepository.deleteById(id);
+			if(id == -100)
+				jdbcTemplate.execute("INSERT INTO \"student\"(\"id\", \"ime\", \"prezime\", \"broj_indeksa\", , \"grupa\", , \"projekat\")\r\n" + 
+									 "VALUES(-100, 'Test SoapUI ime', 'Test SoapUI prezime', 'Test SoapUI broj indeksa', 'Test SoapUI grupa', 'Test SoapUI projekat')");
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 	
 	@PostMapping("student")
+	@CrossOrigin
 	@ApiOperation(value = "Upisuje novog studenta u bazu podataka")
 	public ResponseEntity<Student> insertStudent(@RequestBody Student student){
-		if(!studentRepository.existsById(student.getId())){
-			studentRepository.save(student);
-			return new ResponseEntity<>(HttpStatus.OK);
+		if(studentRepository.existsById(student.getId())){
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
-		return new ResponseEntity<>(HttpStatus.CONFLICT);
+		System.out.println("Broj indeksa:" +student.getBrojIndeksa());
+		studentRepository.save(student);
+		return new ResponseEntity<>(HttpStatus.OK);
+		
 	}
 	
 	@PutMapping("student")
-	@ApiOperation(value = "Modifikuje postojećeg studenata u bazi podataka")
+	@CrossOrigin
+	@ApiOperation(value = "Modifikuje postojeÄ‡eg studenata u bazi podataka")
 	public ResponseEntity<Student> updateStudent(@RequestBody Student  student){
-		if(!studentRepository.existsById(student.getId()))
+		if(studentRepository.existsById(student.getId())) {
+			studentRepository.save(student);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		studentRepository.save(student);
-		return new ResponseEntity<>(HttpStatus.OK);
+		
 	}
 	
 

@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @Entity
 @NamedQuery(name="Projekat.findAll", query="SELECT p FROM Projekat p")
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+@JsonIgnoreProperties({"hibernateLazyInitalizer", "handler"})
 public class Projekat implements Serializable {
 	private static final long serialVersionUID = 1L;
 

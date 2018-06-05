@@ -31,26 +31,26 @@ public class StudentRestController {
 	private JdbcTemplate jdbcTemplate;
 	
 	@GetMapping("student")
-	@ApiOperation(value = "VraÄ‡a kolekciju svih studenata iz baze podataka")
+	@ApiOperation(value = "Vraća kolekciju svih studenata iz baze podataka")
 	public Collection<Student> getStudent(){
 		return studentRepository.findAll();
 	}
 	
 	@GetMapping("student/{id}")
-	@ApiOperation(value = "Vrаća studenta iz baze podataka ciji je ID vrednost prosleđena kao path varijabla")
+	@ApiOperation(value = "Vraća studenta iz baze podataka ciji je ID vrednost proslijeđena kao path varijabla")
 	public Student getStudent(@PathVariable("id") Integer id) {
 		return studentRepository.getOne(id);
 	}
 	
 	@DeleteMapping("student/{id}")
 	@CrossOrigin
-	@ApiOperation(value = "Briše studenta iz baze podataka ciji je ID vrednost prosleđena kao path varijabla")
+	@ApiOperation(value = "Briše studenta iz baze podataka ciji je ID vrednost proslijeđena kao path varijabla")
 	public ResponseEntity<Student> deleteStudent(@PathVariable("id") Integer id){
 		if(studentRepository.existsById(id)) {
 			studentRepository.deleteById(id);
 			if(id == -100)
-				jdbcTemplate.execute("INSERT INTO \"student\"(\"id\", \"ime\", \"prezime\", \"broj_indeksa\", , \"grupa\", , \"projekat\")\r\n" + 
-									 "VALUES(-100, 'Test SoapUI ime', 'Test SoapUI prezime', 'Test SoapUI broj indeksa', 'Test SoapUI grupa', 'Test SoapUI projekat')");
+				jdbcTemplate.execute("INSERT INTO \"student\"(\"id\", \"ime\", \"prezime\", \"broj_indeksa\", \"grupa\", \"projekat\")\r\n" + 
+									 "VALUES(-100, 'TestI', 'TestP', 'IT15', 1, 2)");
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -66,12 +66,11 @@ public class StudentRestController {
 		System.out.println("Broj indeksa:" +student.getBrojIndeksa());
 		studentRepository.save(student);
 		return new ResponseEntity<>(HttpStatus.OK);
-		
 	}
 	
 	@PutMapping("student")
 	@CrossOrigin
-	@ApiOperation(value = "Modifikuje postojeÄ‡eg studenata u bazi podataka")
+	@ApiOperation(value = "Modifikuje postojećeg studenata u bazi podataka")
 	public ResponseEntity<Student> updateStudent(@RequestBody Student  student){
 		if(studentRepository.existsById(student.getId())) {
 			studentRepository.save(student);
@@ -82,4 +81,4 @@ public class StudentRestController {
 	}
 	
 
-}
+} 

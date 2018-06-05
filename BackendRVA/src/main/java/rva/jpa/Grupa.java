@@ -3,7 +3,6 @@ package rva.jpa;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +15,6 @@ import javax.persistence.SequenceGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 
 
 /**
@@ -25,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
  */
 @Entity
 @NamedQuery(name="Grupa.findAll", query="SELECT g FROM Grupa g")
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+@JsonIgnoreProperties({"hibernateLazyInitalizer", "handler"})
 public class Grupa implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -40,7 +38,7 @@ public class Grupa implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="smjer")
 	private Smjer smjer;
-	
+
 	//bi-directional many-to-one association to Student
 	@OneToMany(mappedBy="grupa")
 	@JsonIgnore

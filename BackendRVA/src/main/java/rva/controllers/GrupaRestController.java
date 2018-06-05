@@ -38,13 +38,13 @@ public class GrupaRestController {
 	private JdbcTemplate jdbcTemplate;
 	
 	@GetMapping("grupa")
-	@ApiOperation(value = "VraÄ‡a kolekciju svih grupa iz baze podataka")
+	@ApiOperation(value = "Vraća kolekciju svih grupa iz baze podataka")
 	public Collection<Grupa> getGrupe(){
 		return grupaRepository.findAll();
 	}
 	
 	@GetMapping("grupa/{id}")
-	@ApiOperation(value = "Vrаća grupu iz baze podataka ciji je ID vrednost prosleđena kao path varijabla")
+	@ApiOperation(value = "Vraća grupu iz baze podataka ciji je ID vrednost proslijeđena kao path varijabla")
 	public Grupa getGrupa(@PathVariable("id") Integer id) {
 		return grupaRepository.getOne(id);
 	}
@@ -52,13 +52,13 @@ public class GrupaRestController {
 	
 	@DeleteMapping("grupa/{id}")
 	@CrossOrigin
-	@ApiOperation(value = "Briše grupu iz baze podataka ciji je ID vrednost prosleđena kao path varijabla")
+	@ApiOperation(value = "Briše grupu iz baze podataka ciji je ID vrednost proslijeđena kao path varijabla")
 	public ResponseEntity<Grupa> deleteGrupa(@PathVariable("id") Integer id){
 		if(grupaRepository.existsById(id)) {
 			grupaRepository.deleteById(id);
 			if(id == -100)
 				jdbcTemplate.execute("INSERT INTO \"grupa\"(\"id\", \"oznaka\", \"smjer\")\r\n" + 
-									 "VALUES(-100, 'Test SoapUI grupa', 'Test smjer')");
+									 "VALUES(-100, 'TS', 1)");
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -80,7 +80,7 @@ public class GrupaRestController {
 	
 	@PutMapping("grupa")
 	@CrossOrigin
-	@ApiOperation(value = "Modifikuje postojeÄ‡u grupu u bazi podataka")
+	@ApiOperation(value = "Modifikuje postojeću grupu u bazi podataka")
 	public ResponseEntity<Grupa> updateGrupa(@RequestBody Grupa  grupa){
 		if(grupaRepository.existsById(grupa.getId()))
 		{

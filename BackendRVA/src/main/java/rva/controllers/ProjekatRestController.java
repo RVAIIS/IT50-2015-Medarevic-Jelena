@@ -32,26 +32,26 @@ public class ProjekatRestController {
 	private JdbcTemplate jdbcTemplate;
 	
 	@GetMapping("projekat")
-	@ApiOperation(value = "VraÄ‡a kolekciju svih projekata iz baze podataka")
+	@ApiOperation(value = "Vraća kolekciju svih projekata iz baze podataka")
 	public Collection<Projekat> getProjekti(){
 		return projekatRepository.findAll();
 	}
 	
 	@GetMapping("projekat/{id}")
-	@ApiOperation(value = "Vrаća projekat iz baze podataka ciji je ID vrednost prosleđena kao path varijabla")
+	@ApiOperation(value = "Vraća projekat iz baze podataka ciji je ID vrednost proslijeđena kao path varijabla")
 	public Projekat getProjekat(@PathVariable("id") Integer id) {
 		return projekatRepository.getOne(id);
 	}
 	
 	@DeleteMapping("projekat/{id}")
 	@CrossOrigin
-	@ApiOperation(value = "Briše projekat iz baze podataka ciji je ID vrednost prosleđena kao path varijabla")
+	@ApiOperation(value = "Briše projekat iz baze podataka ciji je ID vrednost proslijeđena kao path varijabla")
 	public ResponseEntity<Projekat> deleteProjekat(@PathVariable("id") Integer id){
 		if(projekatRepository.existsById(id)) {
 			projekatRepository.deleteById(id);
 			if(id == -100)
 				jdbcTemplate.execute("INSERT INTO \"projekat\"(\"id\", \"naziv\", \"oznaka\", \"opis\")\r\n" + 
-									 "VALUES(-100, 'Test SoapUI projekat', 'Test oznaka', 'Test opis grupe')");
+									 "VALUES(-100, 'Test SoapUI', 'TO', 'Test opis grupe')");
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -71,7 +71,7 @@ public class ProjekatRestController {
 	
 	@PutMapping("projekat")
 	@CrossOrigin
-	@ApiOperation(value = "Modifikuje postojeÄ‡i projekat u bazi podataka")
+	@ApiOperation(value = "Modifikuje postojeći projekat u bazi podataka")
 	public ResponseEntity<Projekat> updateProjekat(@RequestBody Projekat  projekat){
 		if(projekatRepository.existsById(projekat.getId())) {
 			projekatRepository.save(projekat);

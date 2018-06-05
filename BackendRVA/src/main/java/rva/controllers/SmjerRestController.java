@@ -32,26 +32,26 @@ public class SmjerRestController {
 	private JdbcTemplate jdbcTemplate;
 	
 	@GetMapping("smjer")
-	@ApiOperation(value = "VraÄ‡a kolekciju svih smjerova iz baze podataka")
+	@ApiOperation(value = "Vraća kolekciju svih smjerova iz baze podataka")
 	public Collection<Smjer> getSmjer(){
 		return smjerRepository.findAll();
 	}
 	
 	@GetMapping("smjer/{id}")
-	@ApiOperation(value = "Vrаća smjer iz baze podataka ciji je ID vrednost prosleđena kao path varijabla")
+	@ApiOperation(value = "Vraća smjer iz baze podataka ciji je ID vrednost proslijeđena kao path varijabla")
 	public Smjer getSmjer(@PathVariable("id") Integer id) {
 		return smjerRepository.getOne(id);
 	}
 	
 	@DeleteMapping("smjer/{id}")
 	@CrossOrigin
-	@ApiOperation(value = "Briše smjer iz baze podataka ciji je ID vrednost prosleđena kao path varijabla")
+	@ApiOperation(value = "Briše smjer iz baze podataka ciji je ID vrednost proslijeđena kao path varijabla")
 	public ResponseEntity<Smjer> deleteSmjer(@PathVariable("id") Integer id){
 		if(smjerRepository.existsById(id)) {
 			smjerRepository.deleteById(id);
 			if(id == -100)
 				jdbcTemplate.execute("INSERT INTO \"smjer\"(\"id\", \"naziv\", \"oznaka\")\r\n" + 
-									 "VALUES(-100, 'Test SoapUI smjer', 'Test oznaka')");
+									 "VALUES(-100, 'Test SoapUI smjer', 'TO')");
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -70,12 +70,9 @@ public class SmjerRestController {
 	}
 	
 	
-	
-	
-	
 	@PutMapping("smjer")
 	@CrossOrigin
-	@ApiOperation(value = "Modifikuje postojeÄ‡i smjer u bazi podataka")
+	@ApiOperation(value = "Modifikuje postojeći smjer u bazi podataka")
 	public ResponseEntity<Smjer> updateSmjer(@RequestBody Smjer  smjer){
 		if(smjerRepository.existsById(smjer.getId())) {
 			smjerRepository.save(smjer);

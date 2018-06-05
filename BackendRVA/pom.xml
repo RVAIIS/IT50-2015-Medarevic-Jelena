@@ -6,10 +6,13 @@
 	<groupId>rva</groupId>
 	<artifactId>BackendRVA</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>BackendRVA</name>
 	<description>Backend RVA</description>
+
+
+
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -25,6 +28,13 @@
 	</properties>
 
 	<dependencies>
+	
+	<!-- za deployment na tomcat -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
 	
 	<dependency>
 			<groupId>io.springfox</groupId>
@@ -84,6 +94,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>backend</finalName>
 	</build>
 
 

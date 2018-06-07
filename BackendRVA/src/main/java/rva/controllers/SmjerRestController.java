@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import rva.jpa.Grupa;
 import rva.jpa.Projekat;
 import rva.jpa.Smjer;
 import rva.reps.SmjerRepository;
@@ -41,6 +42,12 @@ public class SmjerRestController {
 	@ApiOperation(value = "Vraća smjer iz baze podataka ciji je ID vrednost proslijeđena kao path varijabla")
 	public Smjer getSmjer(@PathVariable("id") Integer id) {
 		return smjerRepository.getOne(id);
+	}
+	
+	@GetMapping("smjer/{naziv}")
+	@ApiOperation(value = "Vraća kolekciju smjerova iz baze podataka koji u nazivu sadrže string prosljeđen kao path varijabla")
+	public Collection<Smjer> getSmjerByNaziv(@PathVariable ("naziv") String naziv){
+		return smjerRepository.findByNazivContainingIgnoreCase(naziv);
 	}
 	
 	@DeleteMapping("smjer/{id}")

@@ -43,6 +43,12 @@ public class ProjekatRestController {
 		return projekatRepository.getOne(id);
 	}
 	
+	@GetMapping("projekat/{naziv}")
+	@ApiOperation(value = "Vraća kolekciju projekata iz baze podataka koji u nazivu sadrže string prosljeđen kao path varijabla")
+	public Collection<Projekat> getProjekatByNaziv(@PathVariable ("naziv") String naziv){
+		return projekatRepository.findByNazivContainingIgnoreCase(naziv);
+	}
+	
 	@DeleteMapping("projekat/{id}")
 	@CrossOrigin
 	@ApiOperation(value = "Briše projekat iz baze podataka ciji je ID vrednost proslijeđena kao path varijabla")
